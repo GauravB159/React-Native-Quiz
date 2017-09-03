@@ -44,12 +44,28 @@ const styles = StyleSheet.create({
 class Option extends React.Component{
   constructor(props){
     super(props);
+    this.state={
+      optionData:this.props.value[this.props.num - 1]
+    }
+  }
+  formChange(text){
+    this.setState({
+      optionData:text
+    });
+    this.props.onFormChange(this.props.num,text);
+  }
+  removeOption(){
+    this.props.removeOption(this.props.num);
+    this.setState({
+      optionData: this.props.value[this.props.num - 1]
+    })
   }
   render(){
     return(
       <View>        
-        <TouchableOpacity onPress={this.props.removeOption}><FormLabel>Option {this.props.num}: </FormLabel></TouchableOpacity>
-        <FormInput/>
+        <TouchableOpacity onPress={()=> this.removeOption()}><FormLabel>Option {this.props.num}: </FormLabel></TouchableOpacity>
+        <FormInput value={this.state.optionData} onChangeText={(text) => this.formChange(text)}/>
+        <Text>{JSON.stringify(this.state)}</Text>
       </View>
     );
   }
@@ -58,38 +74,77 @@ class QForm extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      optionData: [],
+      question:"",
+      optionData: [""],
+      correctOption:"",
       numOptions:1
     };
   }
   addOption(){
+    let optionsData = this.state.optionData;
+    optionsData.push("");
     this.setState({
-      numOptions:this.state.numOptions+1
+      numOptions:this.state.numOptions+1,
+      optionData: optionsData
     })
   }
-  removeOption(){
+  removeOption(num){
+    let optionsData = this.state.optionData;
+    optionsData.splice(num-1,1);
     this.setState({
-      numOptions:this.state.numOptions-1
+      numOptions:this.state.numOptions-1,
+      optionData: optionsData
     })
+  }
+  resetForm(){
+    this.setState({
+      numOptions:1,
+      optionData: [""]
+    })
+  }
+  clearForm(){
+    let optionsData=this.state.optionData;
+    for(i in optionsData){
+      optionsData[i]="";
+    }
+    this.setState({
+      optionData: optionsData
+    })
+  }
+  formChange(num,text){
+    let optionsData=this.state.optionData;
+    optionsData[num-1]=text;
+    this.setState({
+      optionData:optionsData
+    });
   }
   render() {
     let options=[];
     for(let i=1;i <= this.state.numOptions;i++){
-      options.push(<Option key={i} num={i} removeOption={this.removeOption.bind(this)}/>)
+      options.push(<Option key={i} num={i} removeOption={(num)=> this.removeOption(num)} value={this.state.optionData} onFormChange={this.formChange.bind(this)}/>)
     }
     return (
     <View>
-      <Text style={{fontSize:20,marginLeft:18}}>Question No. {this.props.qnum}</Text>
+      <View>
+        <Text style={{fontSize:20,marginLeft:18}}>Question No. {this.props.qnum}</Text>
+        <TouchableOpacity onPress={this.resetForm.bind(this)} style={{position:'absolute',right:20,top:3}}>
+          <Text style={{fontSize:18,fontWeight: "300"}}>Reset</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={this.clearForm.bind(this)} style={{position:'absolute',right:80,top:3}}>
+          <Text style={{fontSize:18,fontWeight: "300"}}>Clear</Text>
+        </TouchableOpacity>
+      </View>
       <FormLabel>Question: </FormLabel>
-      <FormInput/>
+      <FormInput onChangeText={(text) => this.setState({question: text})}/>
       {options}
       <View>
         <TouchableOpacity onPress={this.addOption.bind(this)}>
           <Text style={{fontSize:14,fontWeight: "300"}}>      Add an Option</Text>
         </TouchableOpacity>
       </View>
-      <FormLabel>Correct Option/s(comma separated if multiple): </FormLabel>
-      <FormInput/>
+      <FormLabel>Correct Option/s(enter indices, comma separated if multiple): </FormLabel>
+      <FormInput onChangeText={(text) => this.setState({correctOption: text})}/>
+      <Text>{JSON.stringify(this.state)}</Text>
     </View>         
     );
   }
@@ -97,45 +152,33 @@ class QForm extends React.Component{
 export default class Basic extends Component {
   constructor(props) {
     super(props);
-
     this.toggle = this.toggle.bind(this);
-
     this.state = {
       isOpen: false,
-      selectedItem: 'About',
       currentQuestion: 1,
-      optionData: [],
-      numQuestions: 1,
-      numOptions:4
+      questions: [],
+      numQuestions: 1
     };
   }
   componentWillMount(){
-    let data=[];
-    for(let i=0;i<this.state.numQuestions;i++){
-      data.push("");
-    }
-    this.setState({
-      optionData: data
-    });
+    let qs = this.state.questions;
+    qs.push(<QForm qnum={qs.length+1}/>)
+     this.setState({
+      questions:qs
+    })
   }
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen,
     });
   }
-  initData(){
-    let data={};
-    data['question']="";
-    data['options']=[];
-    return question;
-  }
   addQuestion(){
-    let data=this.state.optionData;
-    data.push("");
+    let qs = this.state.questions;
+    qs.push(<QForm qnum={qs.length}/>)
     this.setState({
       numQuestions:this.state.numQuestions+1,
-      optionData:data
-    })
+      questions:qs
+    });
   }
   handleMenuItemClick(val){
     this.setState({
@@ -168,7 +211,8 @@ export default class Basic extends Component {
       >
         <View style={{height:'100%',backgroundColor:'white'}}>
           <ScrollView style={{backgroundColor:'white',position:'absolute',top:20,height:'100%'}}>
-            <QForm qnum={this.state.currentQuestion}/>
+            {this.state.questions[this.state.currentQuestion-1]}
+            <Text>{JSON.stringify(this.state)}</Text>
           </ScrollView>
         </View>
       </SideMenu>
