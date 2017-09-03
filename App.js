@@ -118,6 +118,33 @@ class QForm extends React.Component{
       optionData:optionsData
     });
   }
+  _onPressButton(){
+    let ques = this.state.question;
+    let options = this.state.optionData;
+    let correct = this.state.correctOption;
+
+    fetch('http://192.168.1.102:3000/ques_upload', {
+       method: 'POST',
+       headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json',
+         'ques': ques,
+         'options': options,
+         'correct': correct
+       }
+    })
+    .then((response) => {
+       console.log(response._bodyText);
+       
+       this.setState({
+          res: response._bodyText
+       })
+    })
+    .catch((error) => {
+       console.error(error);
+    });
+
+  }
   render() {
     let options=[];
     for(let i=1;i <= this.state.numOptions;i++){
@@ -145,6 +172,9 @@ class QForm extends React.Component{
       <FormLabel>Correct Option/s(enter indices, comma separated if multiple): </FormLabel>
       <FormInput onChangeText={(text) => this.setState({correctOption: text})}/>
       <Text>{JSON.stringify(this.state)}</Text>
+      <TouchableOpacity onPress={this._onPressButton.bind(this)} style={{position:'relative'}}>
+        <Text style={{fontSize:18,fontWeight: "300"}}>Submit</Text>
+      </TouchableOpacity>
     </View>         
     );
   }
