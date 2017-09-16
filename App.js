@@ -65,7 +65,6 @@ class Option extends React.Component{
       <View>        
         <TouchableOpacity onPress={()=> this.removeOption()}><FormLabel>Option {this.props.num}: </FormLabel></TouchableOpacity>
         <FormInput value={this.state.optionData} onChangeText={(text) => this.formChange(text)}/>
-        <Text>{JSON.stringify(this.state)}</Text>
       </View>
     );
   }
@@ -73,7 +72,7 @@ class Option extends React.Component{
 class QForm extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = this.props.data || {
       question:"",
       optionData: [""],
       correctOption:"",
@@ -116,7 +115,7 @@ class QForm extends React.Component{
     optionsData[num-1]=text;
     this.setState({
       optionData:optionsData
-    });
+    },()=>{this.props.onChange(this.state,this.props.qnum)});
   }
   _onPressButton(){
     let ques = this.state.question;
@@ -133,9 +132,7 @@ class QForm extends React.Component{
          'correct': correct
        }
     })
-    .then((response) => {
-       console.log(response._bodyText);
-       
+    .then((response) => {       
        this.setState({
           res: response._bodyText
        })
@@ -162,7 +159,7 @@ class QForm extends React.Component{
         </TouchableOpacity>
       </View>
       <FormLabel>Question: </FormLabel>
-      <FormInput onChangeText={(text) => this.setState({question: text})}/>
+      <FormInput value={this.state.question} onChangeText={(text) => { this.setState({question: text},()=>{this.props.onChange(this.state,this.props.qnum)})}}/>
       {options}
       <View>
         <TouchableOpacity onPress={this.addOption.bind(this)}>
@@ -170,11 +167,7 @@ class QForm extends React.Component{
         </TouchableOpacity>
       </View>
       <FormLabel>Correct Option/s(enter indices, comma separated if multiple): </FormLabel>
-      <FormInput onChangeText={(text) => this.setState({correctOption: text})}/>
-      <Text>{JSON.stringify(this.state)}</Text>
-      <TouchableOpacity onPress={this._onPressButton.bind(this)} style={{position:'relative'}}>
-        <Text style={{fontSize:18,fontWeight: "300"}}>Submit</Text>
-      </TouchableOpacity>
+      <FormInput value={this.state.correctOption} onChangeText={(text) => this.setState({correctOption: text},()=>{this.props.onChange(this.state,this.props.qnum)})}/>
     </View>         
     );
   }
@@ -192,7 +185,7 @@ export default class Basic extends Component {
   }
   componentWillMount(){
     let qs = this.state.questions;
-    qs.push(<QForm qnum={qs.length+1}/>)
+    qs.push(undefined)
      this.setState({
       questions:qs
     })
@@ -202,9 +195,16 @@ export default class Basic extends Component {
       isOpen: !this.state.isOpen,
     });
   }
+  handleChange(data,index){
+    let qs = this.state.questions;
+    qs[index - 1]=data;
+    this.setState({
+      questions:qs
+    });
+  }
   addQuestion(){
     let qs = this.state.questions;
-    qs.push(<QForm qnum={qs.length}/>)
+    qs.push(undefined);
     this.setState({
       numQuestions:this.state.numQuestions+1,
       questions:qs
@@ -229,10 +229,6 @@ export default class Basic extends Component {
 
   render() {
     const menu = <Menu onItemSelected={this.onMenuItemSelected} addQuestion={this.addQuestion.bind(this)} numQuestions={this.state.numQuestions} onMenuItemClick={this.handleMenuItemClick.bind(this)}/>;
-    let options=[];
-    for(let i=1;i <= this.state.numOptions;i++){
-      options.push(<Option key={i} num={i}/>)
-    }
     return (
       <SideMenu
         menu={menu}
@@ -241,8 +237,7 @@ export default class Basic extends Component {
       >
         <View style={{height:'100%',backgroundColor:'white'}}>
           <ScrollView style={{backgroundColor:'white',position:'absolute',top:20,height:'100%'}}>
-            {this.state.questions[this.state.currentQuestion-1]}
-            <Text>{JSON.stringify(this.state)}</Text>
+          <QForm key={this.state.currentQuestion-1} data={this.state.questions[this.state.currentQuestion-1]} onChange={(data,index)=>this.handleChange(data,index)} qnum={this.state.currentQuestion}/>
           </ScrollView>
         </View>
       </SideMenu>
