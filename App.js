@@ -45,7 +45,7 @@ class Option extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      optionData:this.props.value[this.props.num - 1]
+      optionData:""
     }
   }
   formChange(text){
@@ -53,6 +53,11 @@ class Option extends React.Component{
       optionData:text
     });
     this.props.onFormChange(this.props.num,text);
+  }
+  componentWillReceiveProps(){
+    this.setState({
+      optionData:this.props.value[this.props.num - 1]
+    })
   }
   removeOption(){
     this.props.removeOption(this.props.num);
@@ -97,9 +102,11 @@ class QForm extends React.Component{
   }
   resetForm(){
     this.setState({
+      question:"",
       numOptions:1,
-      optionData: [""]
-    })
+      optionData: [""],
+      correctOption:""
+    },()=>{this.props.onChange(this.state,this.props.qnum)})
   }
   clearForm(){
     let optionsData=this.state.optionData;
@@ -107,8 +114,10 @@ class QForm extends React.Component{
       optionsData[i]="";
     }
     this.setState({
-      optionData: optionsData
-    })
+      question:"",
+      optionData: optionsData,
+      correctOption:""
+    },()=>{this.props.onChange(this.state,this.props.qnum)})
   }
   formChange(num,text){
     let optionsData=this.state.optionData;
