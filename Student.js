@@ -28,7 +28,7 @@ export default class Student extends React.Component {
       dataSnapshot.forEach((child)=>{
         ques.push({
           no:c,
-          ques:child.val().Ques,
+          ques:child.val().ques,
           options:child.val().options,
           correct:child.val().correct
         });
