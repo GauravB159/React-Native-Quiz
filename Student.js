@@ -32,8 +32,9 @@ export default class Student extends React.Component {
           options:child.val().options,
           correct:child.val().correct
         });
+        c=c+1;
       });
-      c=c+1;
+      
       this.setState({
         ques:ques
       })

@@ -23,10 +23,10 @@ export default class Home extends React.Component {
       correct:ques.correct
     })
   }
-  press(){
-     console.log(this.value);
-     console.log(this.state.correct);
-     if(this.value==this.correct){
+  press(cor,sel){
+     console.log(cor);
+     console.log(sel);
+     if(cor==sel){
       Alert.alert('Correct Answer');
      }
      else{
@@ -46,7 +46,7 @@ export default class Home extends React.Component {
       <View>
               
         <Text>{ques.ques}</Text>
-        <FlatList data = {list} renderItem={({item})=><TouchableOpacity onPress = {this.press.bind(this)} correct={ques.correct} value={item.value}><Text>{item.value}</Text></TouchableOpacity>}/>
+        <FlatList data = {list} renderItem={({item})=><TouchableOpacity onPress={()=>this.press(ques.correct,item.value)}><Text>{item.value}</Text></TouchableOpacity>}/>
 
       
       </View>

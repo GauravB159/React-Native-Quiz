@@ -15,10 +15,10 @@ export default class Home extends React.Component {
     return (
       <View>
       <View style={styles.button}>
-        <Button onPress={ () => navigate("Teacher",{screen : "Teacher"}) } title='Teacher'/>
+        <Button onPress={ () => navigate("Login",{screen : "Login"}) } title='Login'/>
       </View>  
       <View style={styles.button}>
-        <Button onPress={ () => navigate("Student",{screen : "Student"}) } title='Student'/>
+        <Button onPress={ () => navigate("Register",{screen : "Register"}) } title='Register'/>
       </View>
       </View>
     );
