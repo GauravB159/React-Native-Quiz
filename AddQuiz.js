@@ -6,14 +6,11 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Button,Alert
+  Button
 } from 'react-native';
 import SideMenu from 'react-native-side-menu';
 import { FormLabel, FormInput } from 'react-native-elements' 
 import Menu from './Menu';
-import {
-  StackNavigator,
-} from 'react-navigation';
 
 import {getDatabase} from './database';
 
@@ -83,10 +80,10 @@ class Option extends React.Component{
 class QForm extends React.Component{
   constructor(props) {
     super(props);
-    this.sclass = this.props.class;
-    this.sub = this.props.sub;
-    this.quizNo = this.props.quizNo;
-    
+    this.sclass = this.props.navigation.state.params.class;
+    this.sub = this.props.navigation.state.params.sub;
+    this.quizNo = this.props.navigation.state.params.c;
+    var db = '/class/'+this.sclass+'/'+this.sub+'/quiz'+this.quizNo;
     this.state = this.props.data || {
       question:"",
       optionData: [""],
@@ -140,10 +137,9 @@ class QForm extends React.Component{
     let ques = this.state.question;
     let options = this.state.optionData;
     let correct = this.state.correctOption;
-    
+    var {goback} = this.props.navigation;
 
-    var db = '/class/'+this.sclass+'/'+this.sub+'/quiz'+this.quizNo;
-    var data = getDatabase().ref(db);
+    
     var c =1; 
     data.on('value',(dataSnapshot)=>{
       
@@ -166,7 +162,7 @@ class QForm extends React.Component{
 
 
     data.push(addques);
-    Alert.alert("Question added");
+    goback();
 
   }
   render() {
@@ -203,9 +199,6 @@ class QForm extends React.Component{
 export default class Add extends Component {
   constructor(props) {
     super(props);
-    this.sclass = this.props.navigation.state.params.class;
-    this.sub = this.props.navigation.state.params.sub;
-    this.quizNo = this.props.navigation.state.params.c;
     this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false,
@@ -268,9 +261,7 @@ export default class Add extends Component {
       >
         <View style={{height:'100%',backgroundColor:'white'}}>
           <ScrollView style={{backgroundColor:'white',position:'absolute',top:20,height:'100%'}}>
-          <QForm key={this.state.currentQuestion-1} data={this.state.questions[this.state.currentQuestion-1]} onChange={(data,index)=>this.handleChange(data,index)} qnum={this.state.currentQuestion} 
-              class={this.sclass} sub={this.sub} quizNo={this.quizNo} 
-          />
+          <QForm key={this.state.currentQuestion-1} data={this.state.questions[this.state.currentQuestion-1]} onChange={(data,index)=>this.handleChange(data,index)} qnum={this.state.currentQuestion}/>
           </ScrollView>
         </View>
       </SideMenu>

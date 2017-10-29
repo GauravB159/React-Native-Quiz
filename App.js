@@ -8,6 +8,11 @@ import Question from './Question';
 import Add from './Add';
 import Login from './Login';
 import Register from './Register';
+import StudentQuiz from './StudentQuiz';
+import Quiz from './Quiz';
+import TeacherQuiz from './TeacherQuiz';
+import TeacherSelect from './TeacherSelect';
+import TeacherQuestion from './TeacherQuestion';
 
 const App = StackNavigator({
 
@@ -17,7 +22,12 @@ const App = StackNavigator({
 	Question:{screen:Question},
 	Add:{screen:Add},
 	Login:{screen:Login},
-	Register:{screen:Register}
+	Register:{screen:Register},
+	StudentQuiz:{screen:StudentQuiz},
+	Quiz:{screen:Quiz},
+	TeacherQuiz:{screen:TeacherQuiz},
+	TeacherSelect:{screen:TeacherSelect},
+	TeacherQuestion:{screen:TeacherQuestion}
 
 });
 

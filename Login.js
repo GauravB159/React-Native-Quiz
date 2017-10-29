@@ -18,19 +18,29 @@ import {getDatabase} from './database';
 
 export default class Login extends React.Component{
 	constructor(props){
+		
 		super(props);
 		this.state={
 			uname:'',
 			pass:'',
 
 		};
+		user = getDatabase().ref('/user');
+		user.on('value',(dataSnapshot)=>{
+		  
+		  
+		  dataSnapshot.forEach((child)=>{
+		     console.log(child.val().username+" "+child.val().password);
+		   });
+		});
 	}
-
+	
 	checkLogin(uname,pass){
 		const {navigate} =this.props.navigation;
 		var c = 0;
 		var msg = '';
 		var utype = '';
+		var sclass ='';
 		user = getDatabase().ref('/user');
 		user.on('value',(dataSnapshot)=>{
 		  
@@ -42,6 +52,7 @@ export default class Login extends React.Component{
 		     	if(child.val().password == pass){
 		     		c=1;
 		     		utype = child.val().utype;
+		     		sclass = child.val().class;
 		     	}
 		     	else{
 		     		msg = 'Invalid password';
@@ -55,7 +66,8 @@ export default class Login extends React.Component{
 		console.log(c);
 		if(c==1){
 			if(utype == 'student'){
-				navigate("Student",{screen:'Student'});
+
+				navigate("Student",{screen:'Student',class:sclass});
 			}
 			else{
 				navigate("Teacher",{screen:'Teacher'});

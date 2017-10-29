@@ -8,7 +8,7 @@ import * as firebase from 'firebase';
 import {getDatabase} from './database';
 
 
-export default class Student extends React.Component {
+export default class TeacherQuiz extends React.Component {
 
 	constructor(props){
 		super(props);
@@ -34,7 +34,6 @@ export default class Student extends React.Component {
 	        sub:child.val().name
 	      });
 	    });
-	    
 	    this.setState({
 	      sub:sub
 	    })
@@ -43,11 +42,11 @@ export default class Student extends React.Component {
 	}
   	
 	render() {
-	console.log(this.state.ques);
+	console.log(this.state.sub);
 	const { navigate } = this.props.navigation;
 	return (
 	  <View>
-	    <FlatList data={this.state.sub} renderItem={({item})=><TouchableOpacity onPress={()=>navigate("Quiz",{sub:item.sub,class:this.sclass})}><Text>{item.sub}</Text></TouchableOpacity>}/>
+	    <FlatList data={this.state.sub} renderItem={({item})=><TouchableOpacity onPress={()=>navigate("TeacherSelect",{sub:item.sub,class	:this.sclass})}><Text>{item.sub}</Text></TouchableOpacity>}/>
 	  </View>
 	);
 }
