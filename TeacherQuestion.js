@@ -46,16 +46,17 @@ export default class Teacher extends React.Component {
 
    static navigationOptions = ({navigation}) => {
     return{
-      title: 'Welcome ${{navigation.state.params.screen}}',
+      title: 'Welcome',
     }
   };		
   render() {
     const { state, navigate } = this.props.navigation;
     return (
       <View>
-        <FlatList data={this.state.ques} renderItem={({item})=><TouchableOpacity onPress={()=>navigate("Question",{ques:item})}><Text>Question No. {item.no}</Text></TouchableOpacity>}/>
+        <Text style={styles.title}>Question List: </Text>
+        <FlatList data={this.state.ques} renderItem={({item})=><TouchableOpacity onPress={()=>navigate("Question",{ques:item})}><Text style={styles.text}>Question No. {item.no}</Text></TouchableOpacity>}/>
         <View style={styles.button}>
-          <Button onPress={()=> navigate("Add",{class:this.sclass,sub:this.sub,c:this.quizNo}) } title='Add Question'/>
+          <Button style={styles.button} onPress={()=> navigate("Add",{class:this.sclass,sub:this.sub,c:this.quizNo}) } title='Add Question'/>
         </View>
       </View>
     );
@@ -63,8 +64,22 @@ export default class Teacher extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles=StyleSheet.create({
+	text:{
+	  fontSize:25,
+	  marginLeft:"5%",
+	},
+	title:{
+		fontSize:30
+  },
+  add:{
+    fontSize:25,
+    marginLeft:"5%",
+    color:'green'
+  },
   button:{
-    margin:20
-  }
-});
+	  width:100,
+    left:"35%",
+    top:"3%"
+	}
+})

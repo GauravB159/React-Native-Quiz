@@ -21,7 +21,11 @@ export default class TeacherSelect extends React.Component {
       c:''
     }
   }
-
+  static navigationOptions = ({navigation}) => {
+    return{
+      title: 'Welcome',
+    }
+  };		
   componentDidMount(){
     this.listenForQues(this.qset);
   }
@@ -46,17 +50,30 @@ export default class TeacherSelect extends React.Component {
 
     });
   }
-   static navigationOptions = {
-    title: 'Welcome ${navigation.state.params.screen}',
-  }		
+	
   render() {
-    console.log(this.state.ques);
     const { navigate } = this.props.navigation;
     return (
       <View>
-        <FlatList data={this.state.ques} renderItem={({item})=><TouchableOpacity onPress={()=>navigate("TeacherQuestion",{class:this.sclass,sub:this.sub,c:item.no})}><Text>Quiz No. {item.no}</Text></TouchableOpacity>}/>
-        <TouchableOpacity onPress={()=> navigate("Add",{class:this.sclass,sub:this.sub,c:this.state.c}) }><Text>Add Quiz</Text></TouchableOpacity>
+        <Text style={styles.title}>Quiz List: </Text>
+        <FlatList data={this.state.ques} renderItem={({item})=><TouchableOpacity activeOpacity={0.5} onPress={()=>navigate("TeacherQuestion",{class:this.sclass,sub:this.sub,c:item.no})}><Text style={styles.text}>Quiz No. {item.no}</Text></TouchableOpacity>}/>
+        <TouchableOpacity activeOpacity={0.7} onPress={()=> navigate("Add",{class:this.sclass,sub:this.sub,c:this.state.c}) }><Text style={styles.add}>Click to Add a Quiz</Text></TouchableOpacity>
       </View>
     );
   }
 }
+
+const styles=StyleSheet.create({
+	text:{
+	  fontSize:25,
+	  marginLeft:"5%",
+	},
+	title:{
+		fontSize:30
+  },
+  add:{
+    fontSize:25,
+    marginLeft:"5%",
+    color:'green'
+  }
+})

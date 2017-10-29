@@ -63,7 +63,6 @@ export default class Login extends React.Component{
 		     }
 		   });
 		});
-		console.log(c);
 		if(c==1){
 			if(utype == 'student'){
 
@@ -80,15 +79,48 @@ export default class Login extends React.Component{
 
 	render(){
 		return(
-			<View>
-				<Text>Username:</Text>
-				<FormInput onChangeText={(text)=>this.setState({uname:text})}/>
-				<Text>Password:</Text>
-				<FormInput onChangeText={(text)=>this.setState({pass:text})}/>
-				<Button onPress={()=>this.checkLogin(this.state.uname,this.state.pass)} title='Login'/>
+			<View style={styles.loginpage}>
+				<Text style={styles.text}>Username:</Text>
+				<FormInput style={styles.input} onChangeText={(text)=>this.setState({uname:text})}/>
+				<Text style={styles.text}>Password:</Text>
+				<FormInput secureTextEntry={true} style={styles.input} onChangeText={(text)=>this.setState({pass:text})}/>
+				<View style={styles.button}>
+					<Button onPress={()=>this.checkLogin(this.state.uname,this.state.pass)} title='Login'/>
+				</View>
 			</View>
-
-
 		);
 	}
 } 
+
+const styles=StyleSheet.create({
+	login:{
+	  height:"60%",
+	  width:"100%"
+	},
+	loginpage:{
+		width:"75%",
+		marginLeft:"12.5%",
+		marginTop:"45%",
+		borderColor:"black",
+		borderStyle:"solid",
+		borderWidth:2,
+		padding:10,
+		paddingLeft:0
+	},
+	input:{
+		fontSize:18,
+		height:40
+	},
+	text:{
+	  fontSize:25,
+	  marginLeft:"5%",
+	},
+	register:{
+	  height:"50%",
+	  width:"100%"
+	},
+	button:{
+	  width:100,
+	  left:"35%"
+	}
+  })

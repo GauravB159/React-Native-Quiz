@@ -16,11 +16,10 @@ import {getDatabase} from './database';
 
 
 const styles = StyleSheet.create({
-  button: {
-    position: 'absolute',
-    top: 20,
-    padding: 10,
-  },
+  button:{
+	  width:100,
+    left:"35%"
+	},
   caption: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -191,7 +190,7 @@ class QForm extends React.Component{
       </View>
       <FormLabel>Correct Option/s(enter indices, comma separated if multiple): </FormLabel>
       <FormInput value={this.state.correctOption} onChangeText={(text) => this.setState({correctOption: text},()=>{this.props.onChange(this.state,this.props.qnum)})}/>
-      <Button title='Submit' onPress={this._onPressButton.bind(this)}/>
+      <View style={styles.button}><Button title='Submit' onPress={this._onPressButton.bind(this)}/></View>
     </View>         
     );
   }

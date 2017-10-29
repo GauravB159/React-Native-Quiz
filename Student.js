@@ -43,7 +43,6 @@ export default class Student extends React.Component {
 	}
   	
 	render() {
-	console.log(this.state.ques);
 	const { navigate } = this.props.navigation;
 	return (
 	  <View>

@@ -46,10 +46,9 @@ export default class StudentQuiz extends React.Component {
     });
   }
    static navigationOptions = {
-    title: 'Welcome ${navigation.state.params.screen}',
+    title: 'Welcome',
   }		
   render() {
-    console.log(this.state.ques);
     const { navigate } = this.props.navigation;
     return (
       <View>

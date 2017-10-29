@@ -42,12 +42,22 @@ export default class TeacherQuiz extends React.Component {
 	}
   	
 	render() {
-	console.log(this.state.sub);
 	const { navigate } = this.props.navigation;
 	return (
-	  <View>
-	    <FlatList data={this.state.sub} renderItem={({item})=><TouchableOpacity onPress={()=>navigate("TeacherSelect",{sub:item.sub,class	:this.sclass})}><Text>{item.sub}</Text></TouchableOpacity>}/>
+		<View>
+			<Text style={styles.title}>Subject List: </Text>
+	    <FlatList data={this.state.sub} renderItem={({item},index)=><TouchableOpacity key={index} onPress={()=>navigate("TeacherSelect",{sub:item.sub,class	:this.sclass})}><Text style={styles.text}>{item.sub}</Text></TouchableOpacity>}/>
 	  </View>
 	);
 }
 }
+
+const styles=StyleSheet.create({
+	text:{
+	  fontSize:25,
+	  marginLeft:"5%",
+	},
+	title:{
+		fontSize:30
+	}
+})

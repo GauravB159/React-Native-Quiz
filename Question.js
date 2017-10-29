@@ -18,14 +18,11 @@ export default class Home extends React.Component {
   ComponentDidMount(){
     const { navigate } = this.props.navigation;
     const ques = this.props.navigation.state.params.ques;
-    console.log(ques.correct);
     this.setState({
       correct:ques.correct
     })
   }
   press(cor,sel){
-     console.log(cor);
-     console.log(sel);
      if(cor==sel){
       Alert.alert('Correct Answer');
      }

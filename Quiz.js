@@ -44,7 +44,7 @@ export default class Quiz extends React.Component {
     });
   }
    static navigationOptions = {
-    title: 'Welcome ${navigation.state.params.screen}',
+    title: 'Welcome',
   }		
   render() {
     console.log(this.state.ques);
